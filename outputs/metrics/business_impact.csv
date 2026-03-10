@@ -1,0 +1,4 @@
+Model,Overstock_Cost_Year,Stockout_Cost_Year,Total_Cost_Year,Savings_vs_Naive
+SARIMA,88.27,1260526.1,1260614.37,-89888.88
+LSTM,835.48,2152582.72,2153418.2,-982692.72
+Naive,248.7,1170476.79,1170725.49,0.0
