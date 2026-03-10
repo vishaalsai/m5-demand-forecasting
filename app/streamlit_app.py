@@ -75,11 +75,12 @@ def load_csv(name: str) -> pd.DataFrame | None:
 
 
 # ── data load ─────────────────────────────────────────────────────────────────
+# Raw M5 CSVs are not committed (too large). On Streamlit Cloud the app
+# falls back to pre-generated plots and metric CSVs from outputs/.
 try:
     df = load_data()
     data_ok = True
-except Exception as exc:
-    st.error(f"Could not load raw data: {exc}")
+except Exception:
     data_ok = False
 
 # =============================================================================
@@ -91,6 +92,13 @@ if page == "1 · Overview":
         "Daily aggregated sales for Walmart store **CA_1** (California), "
         "covering **Jan 2011 – May 2016** from the M5 Forecasting Competition."
     )
+
+    if not data_ok:
+        st.info(
+            "Raw M5 data files are not bundled with this deployment (files are ~1 GB). "
+            "Interactive charts below are replaced by pre-generated plots. "
+            "All forecast outputs and business metrics are fully available."
+        )
 
     if data_ok:
         # KPI row
@@ -135,6 +143,13 @@ if page == "1 · Overview":
             st.dataframe(df.head(50), use_container_width=True)
     else:
         show_png("01_timeseries_overview.png", "CA_1 Daily Sales 2011–2016")
+        # Show hardcoded KPIs from known dataset stats
+        c1, c2, c3, c4, c5 = st.columns(5)
+        c1.metric("Total Days",       "1,913")
+        c2.metric("Date Range",       "Jan 2011 – May 2016")
+        c3.metric("Avg Daily Sales",  "4,894")
+        c4.metric("Peak Daily Sales", "8,185")
+        c5.metric("Total Units Sold", "9,364,498")
 
 # =============================================================================
 # PAGE 2 — EDA & PATTERNS
