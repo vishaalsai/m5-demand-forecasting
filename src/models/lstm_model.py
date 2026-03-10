@@ -4,6 +4,8 @@ lstm_model.py
 LSTM sequence model for CA_1 daily demand forecasting using TensorFlow/Keras.
 """
 
+from __future__ import annotations
+
 import numpy as np
 import pandas as pd
 

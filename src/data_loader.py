@@ -11,6 +11,8 @@ Expects the following files in data/raw/:
 Returns a clean daily-aggregated DataFrame for CA_1.
 """
 
+from __future__ import annotations
+
 import os
 import pandas as pd
 
@@ -105,7 +107,7 @@ def select_and_sort(df: pd.DataFrame) -> pd.DataFrame:
     """Return final clean DataFrame with canonical column order, sorted by date."""
     final_cols = [
         "date", "sales", "day_of_week", "month", "year",
-        "is_weekend", "is_holiday", "snap_day",
+        "is_weekend", "is_holiday", "event_name_1", "snap_day",
     ]
     return df[final_cols].sort_values("date").reset_index(drop=True)
 
@@ -117,7 +119,8 @@ def load_ca1_daily() -> pd.DataFrame:
     Returns
     -------
     pd.DataFrame
-        Columns: date, sales, day_of_week, month, year, is_weekend, is_holiday, snap_day
+        Columns: date, sales, day_of_week, month, year, is_weekend, is_holiday,
+                 event_name_1, snap_day
     """
     sales, calendar, prices = load_raw_data()
     ca1 = filter_ca1(sales)
@@ -127,6 +130,10 @@ def load_ca1_daily() -> pd.DataFrame:
     featured = engineer_features(merged)
     clean = select_and_sort(featured)
     return clean
+
+
+# Alias used in notebooks: from data_loader import load_m5_data
+load_m5_data = load_ca1_daily
 
 
 # ---------------------------------------------------------------------------
